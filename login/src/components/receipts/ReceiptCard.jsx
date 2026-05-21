@@ -1,68 +1,104 @@
 import styles from './ReceiptCard.module.css';
-import { CheckCircle2, Clock3, FileText } from 'lucide-react';
-import { formatDate, formatCurrency, getPromedioHexColor } from '../../utils/helpers';
-
-const hexToRgba = (hex, alpha = 0.08) => {
-  const cleaned = hex.replace('#', '');
-  const bigint = parseInt(cleaned, 16);
-  const r = (bigint >> 16) & 255;
-  const g = (bigint >> 8) & 255;
-  const b = bigint & 255;
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-};
+import { Download, Check, Clock } from 'lucide-react';
 
 export const ReceiptCard = ({ student }) => {
-  const isPaid = student.pago?.estado === 'pagado';
-  const accentColor = getPromedioHexColor(student.promedio);
-  const accentBackground = hexToRgba(accentColor, 0.1);
+  const { nombre, email, curso, pago } = student;
+  const isPaid = pago.estado === 'pagado';
+  
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('es-ES', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  const handleDownloadReceipt = () => {
+    // Generate receipt as PDF or print
+    const receiptContent = `
+      RECIBO DE PAGO - MATRÍCULA
+      ==============================
+      Número: ${pago.numeroRecibo}
+      Estudiante: ${nombre}
+      Email: ${email}
+      Curso: ${curso}
+      Monto: $${pago.monto.toFixed(2)}
+      Fecha de Pago: ${formatDate(pago.fechaPago)}
+      Método de Pago: ${pago.metodo}
+      Estado: ${pago.estado.toUpperCase()}
+    `;
+    
+    // Create a blob and download
+    const element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(receiptContent));
+    element.setAttribute('download', `${pago.numeroRecibo}.txt`);
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  };
 
   return (
-    <article className={styles.card} style={{ borderLeftColor: accentColor }}>
-      <div className={styles.cardHeader} style={{ backgroundColor: accentBackground }}>
-        <div>
-          <p className={styles.studentName} style={{ color: accentColor }}>{student.nombre}</p>
-          <p className={styles.course}>{student.curso}</p>
+    <div className={`${styles.card} ${styles[pago.estado]}`}>
+      <div className={styles.header}>
+        <div className={styles.studentInfo}>
+          <h3 className={styles.name}>{nombre}</h3>
+          <p className={styles.course}>{curso}</p>
         </div>
-        <span className={`${styles.statusBadge} ${isPaid ? styles.paid : styles.pending}`}>
+        <div className={`${styles.badge} ${styles[pago.estado]}`}>
           {isPaid ? (
             <>
-              <CheckCircle2 size={16} /> Pagado
+              <Check size={16} />
+              <span>Pagado</span>
             </>
           ) : (
             <>
-              <Clock3 size={16} /> Pendiente
+              <Clock size={16} />
+              <span>Pendiente</span>
             </>
           )}
-        </span>
-      </div>
-
-      <div className={styles.body}>
-        <div className={styles.row}>
-          <span>Email:</span>
-          <strong>{student.email}</strong>
-        </div>
-        <div className={styles.row}>
-          <span>Monto:</span>
-          <strong style={{ color: accentColor }}>{formatCurrency(student.pago?.monto || 0)}</strong>
-        </div>
-        <div className={styles.row}>
-          <span>Fecha de Pago:</span>
-          <strong>{isPaid ? formatDate(student.pago.fechaPago) : 'Pendiente'}</strong>
-        </div>
-        <div className={styles.row}>
-          <span>Método:</span>
-          <strong>{isPaid ? student.pago.metodo : 'Pendiente'}</strong>
-        </div>
-        <div className={styles.row}>
-          <span>Recibo:</span>
-          <strong>{isPaid ? student.pago.numeroRecibo : 'Pendiente'}</strong>
         </div>
       </div>
 
-      <div className={styles.cardFooter} style={{ color: accentColor, backgroundColor: accentBackground }}>
-        <FileText size={18} />
-        <span>{isPaid ? 'Recibo registrado' : 'Pago en espera'}</span>
+      <div className={styles.content}>
+        <div className={styles.row}>
+          <span className={styles.label}>Email:</span>
+          <span className={styles.value}>{email}</span>
+        </div>
+        <div className={styles.row}>
+          <span className={styles.label}>Monto:</span>
+          <span className={styles.value}>${pago.monto.toFixed(2)}</span>
+        </div>
+        {isPaid && (
+          <>
+            <div className={styles.row}>
+              <span className={styles.label}>Fecha de Pago:</span>
+              <span className={styles.value}>{formatDate(pago.fechaPago)}</span>
+            </div>
+            <div className={styles.row}>
+              <span className={styles.label}>Método:</span>
+              <span className={styles.value}>{pago.metodo}</span>
+            </div>
+            <div className={styles.row}>
+              <span className={styles.label}>Recibo:</span>
+              <span className={styles.receipt}>{pago.numeroRecibo}</span>
+            </div>
+          </>
+        )}
       </div>
-    </article>
+
+      {isPaid && (
+        <div className={styles.footer}>
+          <button 
+            className={styles.downloadBtn}
+            onClick={handleDownloadReceipt}
+            title="Descargar recibo"
+          >
+            <Download size={18} />
+            <span>Descargar Recibo</span>
+          </button>
+        </div>
+      )}
+    </div>
   );
 };

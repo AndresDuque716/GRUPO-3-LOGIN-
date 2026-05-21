@@ -1,8 +1,14 @@
 import styles from './StudentCard.module.css';
 import { Edit2, Trash2, Award } from 'lucide-react';
-import { formatDate, getPromedioHexColor } from '../../utils/helpers';
+import { formatDate } from '../../utils/helpers';
 
 export const StudentCard = ({ student, onEdit, onDelete }) => {
+  const getPromedioColor = (promedio) => {
+    if (promedio >= 90) return '#22c55e';
+    if (promedio >= 80) return '#2563eb';
+    if (promedio >= 70) return '#f97316';
+    return '#ef4444';
+  };
 
   return (
     <div className={styles.card}>
@@ -31,7 +37,7 @@ export const StudentCard = ({ student, onEdit, onDelete }) => {
         <div className={styles.promedioContainer}>
           <div className={styles.promedioText}>
             <span className={styles.label}>Promedio</span>
-            <div className={styles.promedioValue} style={{ color: getPromedioHexColor(student.promedio) }}>
+            <div className={styles.promedioValue} style={{ color: getPromedioColor(student.promedio) }}>
               <Award size={16} />
               {student.promedio}%
             </div>
@@ -41,7 +47,7 @@ export const StudentCard = ({ student, onEdit, onDelete }) => {
               className={styles.promedioFill}
               style={{
                 width: `${student.promedio}%`,
-                backgroundColor: getPromedioHexColor(student.promedio)
+                backgroundColor: getPromedioColor(student.promedio)
               }}
             />
           </div>
