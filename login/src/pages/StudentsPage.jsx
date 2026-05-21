@@ -17,7 +17,7 @@ import { ExportMenu } from '../components/ExportMenu';
 import { useResponsive } from '../hooks/useResponsive';
 import { initialStudents } from '../data/mockStudents';
 import { calculateStats } from '../utils/helpers';
-import { Plus, Users, TrendingUp, Award, Zap } from 'lucide-react';
+import { Plus, Users, TrendingUp, Award, Zap, CheckCircle2, DollarSign, Clock } from 'lucide-react';
 
 export const StudentsPage = () => {
   const [students, setStudents] = useState(initialStudents);
@@ -45,6 +45,20 @@ export const StudentsPage = () => {
 
   // Calculate statistics
   const stats = calculateStats(filteredStudents);
+  const pagosRealizados = stats.activos;
+  const pagosPendientes = stats.total - stats.activos;
+  const totalRecaudado = pagosRealizados * 120;
+  const promedioMensual = stats.total ? (totalRecaudado / 6).toFixed(2) : '0.00';
+  const pagoCompletadoRate = stats.total ? Math.round((pagosRealizados / stats.total) * 100) : 0;
+
+  const monthlyRevenue = [1320, 1200, 950, 700, 450, 200];
+  const monthlyLabels = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'];
+  const monthlyAmounts = ['1320', '1200', '950', '700', '450', '200'];
+  const maxRevenue = Math.max(...monthlyRevenue, totalRecaudado || 0, 1500);
+  const yAxisLabels = ['$0', '$300', '$600', '$900', '$1200', '$1500'];
+  const linePoints = monthlyRevenue
+    .map((value, index) => `${(index / (monthlyRevenue.length - 1)) * 100},${100 - (value / maxRevenue) * 100}`)
+    .join(' ');
 
   // Toast notification
   const showToast = (message, type = 'success') => {
@@ -230,8 +244,149 @@ export const StudentsPage = () => {
 
             {view === 'estadisticas' && (
               <div>
-                <h2>Estadísticas</h2>
-                <p>Panel de estadísticas próximamente.</p>
+                <div className={styles.statsHeader}>
+                  <div>
+                    <h2>Estadísticas</h2>
+                    <p className={styles.statsHeaderSubtitle}>Resumen general del sistema</p>
+                  </div>
+                </div>
+
+                <div className={styles.metricCards}>
+                  <StatsCard
+                    variant="light"
+                    icon={Users}
+                    title="Total Estudiantes"
+                    value={stats.total}
+                  />
+                  <StatsCard
+                    variant="light"
+                    icon={CheckCircle2}
+                    title="Pagos Realizados"
+                    value={pagosRealizados}
+                  />
+                  <StatsCard
+                    variant="light"
+                    icon={Clock}
+                    title="Pagos Pendientes"
+                    value={pagosPendientes}
+                  />
+                  <StatsCard
+                    variant="light"
+                    icon={DollarSign}
+                    title="Total Recaudado"
+                    value={`$${totalRecaudado.toFixed(2)}`}
+                  />
+                </div>
+
+                <div className={styles.analyticsGrid}>
+                  <div className={styles.analyticsCard}>
+                    <div className={styles.analyticsHeader}>
+                      <div>
+                        <p className={styles.analyticsLabel}>Rendimiento de Pagos</p>
+                      </div>
+                    </div>
+                    <div className={styles.donutWrapper}>
+                      <div
+                        className={styles.donutChart}
+                        style={{
+                          background: `conic-gradient(#22c55e 0 ${pagoCompletadoRate}%, #ef4444 ${pagoCompletadoRate}% 100%)`
+                        }}
+                      >
+                        <div className={styles.donutInner}>
+                          <span className={styles.donutPercent}>{pagoCompletadoRate}%</span>
+                          <span className={styles.donutLabel}>Pagos Completados</span>
+                        </div>
+                      </div>
+                      <div className={styles.chartLegend}>
+                        <div className={styles.legendItem}>
+                          <span className={styles.legendDotGreen}></span>
+                          <div>
+                            <p className={styles.legendTitle}>Pagos Realizados</p>
+                            <p className={styles.legendValue}>{pagosRealizados} ({pagoCompletadoRate}%)</p>
+                          </div>
+                        </div>
+                        <div className={styles.legendItem}>
+                          <span className={styles.legendDotRed}></span>
+                          <div>
+                            <p className={styles.legendTitle}>Pagos Pendientes</p>
+                            <p className={styles.legendValue}>{pagosPendientes} ({100 - pagoCompletadoRate}%)</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className={styles.updateNote}>
+                      <p className={styles.updateLabel}>Última Actualización</p>
+                      <p className={styles.updateValue}>24 de enero de 2024, 10:30 AM</p>
+                    </div>
+                  </div>
+
+                  <div className={styles.analyticsCard}>
+                    <div className={styles.analyticsHeader}>
+                      <div>
+                        <p className={styles.analyticsLabel}>Recaudación Mensual</p>
+                      </div>
+                    </div>
+                    <div className={styles.lineChart}>
+                      <div className={styles.lineChartYAxis}>
+                        {yAxisLabels.map(label => (
+                          <span key={label} className={styles.lineChartYAxisLabel}>{label}</span>
+                        ))}
+                      </div>
+                      <div className={styles.lineChartCanvas}>
+                        <svg viewBox="0 0 100 100" preserveAspectRatio="none" className={styles.lineChartSvg}>
+                          <polyline
+                            points={linePoints}
+                            className={styles.lineChartPolyline}
+                          />
+                          {monthlyRevenue.map((value, index) => {
+                            const x = (index / (monthlyRevenue.length - 1)) * 100;
+                            const y = 100 - (value / maxRevenue) * 100;
+                            return (
+                              <circle
+                                key={index}
+                                cx={x}
+                                cy={y}
+                                r="2.5"
+                                className={styles.lineChartDot}
+                              />
+                            );
+                          })}
+                        </svg>
+                      </div>
+                      <div className={styles.lineChartLabels}>
+                        {monthlyLabels.map(label => (
+                          <span key={label} className={styles.lineChartLabel}>{label}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className={styles.chartSummary}>
+                      <div className={styles.summaryItem}>
+                        <p className={styles.summaryLabel}>Total Recaudado</p>
+                        <p className={styles.summaryValue}>${totalRecaudado.toFixed(2)}</p>
+                      </div>
+                      <div className={styles.summaryItem}>
+                        <p className={styles.summaryLabel}>Promedio Mensual</p>
+                        <p className={styles.summaryValue}>${promedioMensual}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={styles.summaryRow}>
+                  <div className={styles.summaryCard}>
+                    <h3>Resumen General</h3>
+                    <p>
+                      Del total de {stats.total} estudiantes, {pagosRealizados} han completado sus pagos y {pagosPendientes} tienen pagos pendientes.
+                    </p>
+                    <p>
+                      El monto total recaudado hasta la fecha es de ${totalRecaudado.toFixed(2)}, con un promedio mensual estimado de ${promedioMensual}.
+                    </p>
+                  </div>
+                  <div className={styles.trendCard}>
+                    <span className={styles.trendValue}>+20%</span>
+                    <p>vs mes anterior</p>
+                  </div>
+                </div>
               </div>
             )}
 
