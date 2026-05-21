@@ -4,6 +4,15 @@ export const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString('es-ES', options);
 };
 
+export const formatCurrency = (value) => {
+  return new Intl.NumberFormat('es-ES', {
+    style: 'currency',
+    currency: 'EUR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(value);
+};
+
 export const getInitials = (nombre) => {
   return nombre
     .split(' ')
@@ -22,6 +31,13 @@ export const getColorForPromedio = (promedio) => {
   if (promedio >= 80) return 'var(--color-primary)';
   if (promedio >= 70) return 'var(--color-warning)';
   return 'var(--color-danger)';
+};
+
+export const getPromedioHexColor = (promedio) => {
+  if (promedio >= 90) return '#22c55e';
+  if (promedio >= 80) return '#2563eb';
+  if (promedio >= 70) return '#f97316';
+  return '#ef4444';
 };
 
 export const validateEmail = (email) => {
