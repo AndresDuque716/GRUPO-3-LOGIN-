@@ -14,6 +14,7 @@ import { EmptyState } from '../components/common/EmptyState';
 import { ToastContainer } from '../components/common/Toast';
 import { Button } from '../components/common/Button';
 import { ExportMenu } from '../components/ExportMenu';
+import { ConfigurationPage } from './ConfigurationPage'; 
 import { useResponsive } from '../hooks/useResponsive';
 import { initialStudents } from '../data/mockStudents';
 import { calculateStats } from '../utils/helpers';
@@ -60,6 +61,12 @@ export const StudentsPage = () => {
     .map((value, index) => `${(index / (monthlyRevenue.length - 1)) * 100},${100 - (value / maxRevenue) * 100}`)
     .join(' ');
 
+  // Interceptor de navegación para cerrar el menú en móviles de forma automática
+  const handleNavigate = (targetView) => {
+    setView(targetView);
+    setSidebarOpen(false); 
+  };
+
   // Toast notification
   const showToast = (message, type = 'success') => {
     const id = Date.now();
@@ -85,11 +92,9 @@ export const StudentsPage = () => {
   // Handle save student
   const handleSaveStudent = (studentData) => {
     if (selectedStudent) {
-      // Update existing student
       setStudents(prev => prev.map(s => s.id === studentData.id ? studentData : s));
       showToast('Estudiante actualizado correctamente', 'success');
     } else {
-      // Add new student
       setStudents(prev => [...prev, studentData]);
       showToast('Estudiante agregado correctamente', 'success');
     }
@@ -129,8 +134,15 @@ export const StudentsPage = () => {
 
   return (
     <div className={styles.container}>
-      {/* Sidebar */}
-      {isDesktop && <Sidebar view={view} onNavigate={setView} />}
+      {/* Sidebar - Usamos la nueva función controlada para móviles */}
+      {isDesktop && <Sidebar view={view} onNavigate={handleNavigate} />}
+      
+      {/* Si no es desktop y sidebarOpen es true, mostramos un Sidebar flotante móvil */}
+      {!isDesktop && sidebarOpen && (
+        <div className={styles.mobileSidebarWrapper}>
+          <Sidebar view={view} onNavigate={handleNavigate} />
+        </div>
+      )}
 
       {/* Main Content */}
       <div className={styles.main}>
@@ -138,21 +150,21 @@ export const StudentsPage = () => {
         <Header
           sidebarOpen={!isDesktop ? sidebarOpen : undefined}
           onMenuToggle={() => setSidebarOpen(!sidebarOpen)}
-          totalStudents={students.length}
-          filteredStudents={filteredStudents.length}
+          totalStudents={view === 'students' ? students.length : undefined}
+          filteredStudents={view === 'students' ? filteredStudents.length : undefined}
         />
 
         {/* Content */}
         <div className={styles.content}>
             {view === 'students' && (
               <>
-                {/* Stats Cards */}
+                {/* Stats Cards - Removido el proceso de Node para evitar fallos con Vite */}
                 <div className={styles.statsGrid}>
                   <StatsCard
                     icon={Users}
                     title="Total Estudiantes"
                     value={stats.total}
-                    color={process.env.NODE_ENV === 'production' ? '#2563eb' : '#2563eb'}
+                    color="#2563eb"
                   />
                   <StatsCard
                     icon={TrendingUp}
@@ -391,15 +403,12 @@ export const StudentsPage = () => {
             )}
 
             {view === 'configuracion' && (
-              <div>
-                <h2>Configuración</h2>
-                <p>Ajustes de la aplicación próximamente.</p>
-              </div>
+              <ConfigurationPage onShowToast={showToast} />
             )}
         </div>
 
         {/* Mobile Navbar */}
-        {isMobile && <MobileNavbar view={view} onNavigate={setView} />}
+        {isMobile && <MobileNavbar view={view} onNavigate={handleNavigate} />}
       </div>
 
       {/* Modals */}
