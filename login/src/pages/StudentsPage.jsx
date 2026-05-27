@@ -14,6 +14,7 @@ import { EmptyState } from '../components/common/EmptyState';
 import { ToastContainer } from '../components/common/Toast';
 import { Button } from '../components/common/Button';
 import { ExportMenu } from '../components/ExportMenu';
+import { ReceiptsList } from '../components/receipts/ReceiptsList';
 import { ConfigurationPage } from './ConfigurationPage'; 
 import { useResponsive } from '../hooks/useResponsive';
 import { initialStudents } from '../data/mockStudents';
@@ -150,6 +151,9 @@ export const StudentsPage = () => {
         <Header
           sidebarOpen={!isDesktop ? sidebarOpen : undefined}
           onMenuToggle={() => setSidebarOpen(!sidebarOpen)}
+          totalStudents={view === 'recibos' ? students.length : students.length}
+          filteredStudents={view === 'recibos' ? students.length : filteredStudents.length}
+          title={view === 'recibos' ? 'Recibos' : 'Estudiantes'}
           totalStudents={view === 'students' ? students.length : undefined}
           filteredStudents={view === 'students' ? filteredStudents.length : undefined}
         />
@@ -248,10 +252,7 @@ export const StudentsPage = () => {
             )}
 
             {view === 'recibos' && (
-              <div>
-                <h2>Recibos</h2>
-                <p>Gestión de recibos próximamente.</p>
-              </div>
+              <ReceiptsList students={students} />
             )}
 
             {view === 'estadisticas' && (

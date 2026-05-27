@@ -7,7 +7,14 @@ export const initialStudents = [
     curso: 'Desarrollo Web Full Stack',
     estado: 'activo',
     promedio: 92,
-    fechaRegistro: '2024-01-15'
+    fechaRegistro: '2024-01-15',
+    pago: {
+      estado: 'pagado',
+      monto: 200.00,
+      fechaPago: '2024-01-20',
+      metodo: 'Tarjeta de Crédito',
+      numeroRecibo: 'REC-001-2024'
+    }
   },
   {
     id: 2,
@@ -16,7 +23,14 @@ export const initialStudents = [
     curso: 'Data Science',
     estado: 'activo',
     promedio: 88,
-    fechaRegistro: '2024-01-20'
+    fechaRegistro: '2024-01-20',
+    pago: {
+      estado: 'pagado',
+      monto: 200.00,
+      fechaPago: '2024-01-25',
+      metodo: 'Transferencia Bancaria',
+      numeroRecibo: 'REC-002-2024'
+    }
   },
   {
     id: 3,
@@ -25,7 +39,14 @@ export const initialStudents = [
     curso: 'Diseño UX/UI',
     estado: 'activo',
     promedio: 95,
-    fechaRegistro: '2024-01-18'
+    fechaRegistro: '2024-01-18',
+    pago: {
+      estado: 'pagado',
+      monto: 200.00,
+      fechaPago: '2024-01-22',
+      metodo: 'Efectivo',
+      numeroRecibo: 'REC-003-2024'
+    }
   },
   {
     id: 4,
@@ -34,7 +55,14 @@ export const initialStudents = [
     curso: 'Ciberseguridad',
     estado: 'inactivo',
     promedio: 78,
-    fechaRegistro: '2024-02-01'
+    fechaRegistro: '2024-02-01',
+    pago: {
+      estado: 'pendiente',
+      monto: 200.00,
+      fechaPago: null,
+      metodo: null,
+      numeroRecibo: null
+    }
   },
   {
     id: 5,
@@ -43,7 +71,14 @@ export const initialStudents = [
     curso: 'Desarrollo Web Full Stack',
     estado: 'activo',
     promedio: 91,
-    fechaRegistro: '2024-02-05'
+    fechaRegistro: '2024-02-05',
+    pago: {
+      estado: 'pagado',
+      monto: 200.00,
+      fechaPago: '2024-02-08',
+      metodo: 'Tarjeta de Débito',
+      numeroRecibo: 'REC-005-2024'
+    }
   },
   {
     id: 6,
@@ -52,7 +87,14 @@ export const initialStudents = [
     curso: 'Data Science',
     estado: 'activo',
     promedio: 89,
-    fechaRegistro: '2024-02-10'
+    fechaRegistro: '2024-02-10',
+    pago: {
+      estado: 'pagado',
+      monto: 200.00,
+      fechaPago: '2024-02-12',
+      metodo: 'Transferencia Bancaria',
+      numeroRecibo: 'REC-006-2024'
+    }
   },
   {
     id: 7,
@@ -61,7 +103,14 @@ export const initialStudents = [
     curso: 'Diseño UX/UI',
     estado: 'activo',
     promedio: 93,
-    fechaRegistro: '2024-02-12'
+    fechaRegistro: '2024-02-12',
+    pago: {
+      estado: 'pagado',
+      monto: 200.00,
+      fechaPago: '2024-02-15',
+      metodo: 'Tarjeta de Crédito',
+      numeroRecibo: 'REC-007-2024'
+    }
   },
   {
     id: 8,
@@ -70,7 +119,14 @@ export const initialStudents = [
     curso: 'Ciberseguridad',
     estado: 'activo',
     promedio: 87,
-    fechaRegistro: '2024-02-15'
+    fechaRegistro: '2024-02-15',
+    pago: {
+      estado: 'pagado',
+      monto: 200.00,
+      fechaPago: '2024-02-18',
+      metodo: 'Efectivo',
+      numeroRecibo: 'REC-008-2024'
+    }
   },
   {
     id: 9,
@@ -79,7 +135,14 @@ export const initialStudents = [
     curso: 'Desarrollo Web Full Stack',
     estado: 'inactivo',
     promedio: 75,
-    fechaRegistro: '2024-02-18'
+    fechaRegistro: '2024-02-18',
+    pago: {
+      estado: 'pendiente',
+      monto: 200.00,
+      fechaPago: null,
+      metodo: null,
+      numeroRecibo: null
+    }
   },
   {
     id: 10,
@@ -88,7 +151,14 @@ export const initialStudents = [
     curso: 'Data Science',
     estado: 'activo',
     promedio: 90,
-    fechaRegistro: '2024-02-20'
+    fechaRegistro: '2024-02-20',
+    pago: {
+      estado: 'pagado',
+      monto: 200.00,
+      fechaPago: '2024-02-22',
+      metodo: 'Transferencia Bancaria',
+      numeroRecibo: 'REC-010-2024'
+    }
   }
 ];
 

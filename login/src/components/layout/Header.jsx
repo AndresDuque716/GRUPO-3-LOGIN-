@@ -1,7 +1,7 @@
 import styles from './Header.module.css';
 import { Menu, Bell } from 'lucide-react';
 
-export const Header = ({ sidebarOpen, onMenuToggle, totalStudents, filteredStudents }) => {
+export const Header = ({ sidebarOpen, onMenuToggle, totalStudents, filteredStudents, title = 'Estudiantes' }) => {
   return (
     <header className={styles.header}>
       <div className={styles.headerContent}>
@@ -12,9 +12,9 @@ export const Header = ({ sidebarOpen, onMenuToggle, totalStudents, filteredStude
             </button>
           )}
           <div>
-            <h1 className={styles.title}>Estudiantes</h1>
+            <h1 className={styles.title}>{title}</h1>
             <p className={styles.subtitle}>
-              {filteredStudents} de {totalStudents} estudiantes
+              {filteredStudents} de {totalStudents}
             </p>
           </div>
         </div>

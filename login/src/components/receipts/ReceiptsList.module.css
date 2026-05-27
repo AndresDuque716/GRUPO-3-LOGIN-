@@ -1,0 +1,135 @@
+.container {
+  width: 100%;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.statCard {
+  background: var(--color-card);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  border: 1px solid var(--color-border);
+  text-align: center;
+  transition: all var(--transition-base);
+}
+
+.statCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+  border-color: var(--color-border-light);
+}
+
+.statCard.success {
+  border-left: 4px solid var(--color-success);
+}
+
+.statCard.danger {
+  border-left: 4px solid var(--color-danger);
+}
+
+.statCard.primary {
+  border-left: 4px solid var(--color-primary);
+}
+
+.statValue {
+  font-size: 28px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: 4px;
+}
+
+.statCard.success .statValue {
+  color: var(--color-success);
+}
+
+.statCard.danger .statValue {
+  color: var(--color-danger);
+}
+
+.statCard.primary .statValue {
+  color: var(--color-primary);
+}
+
+.statLabel {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.toolbar {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.toolbar > :first-child {
+  flex: 1;
+  min-width: 250px;
+}
+
+.filterButtons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.receiptsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 1024px) {
+  .statsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+
+  .receiptsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .statCard {
+    padding: 16px;
+  }
+
+  .statValue {
+    font-size: 22px;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .toolbar > :first-child {
+    width: 100%;
+  }
+
+  .filterButtons {
+    width: 100%;
+    gap: 6px;
+  }
+
+  .filterButtons button {
+    flex: 1;
+    font-size: 12px;
+  }
+
+  .receiptsGrid {
+    grid-template-columns: 1fr;
+  }
+}
