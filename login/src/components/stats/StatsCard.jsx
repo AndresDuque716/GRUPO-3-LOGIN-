@@ -1,20 +1,19 @@
 import styles from './StatsCard.module.css';
 
-export const StatsCard = ({ icon: Icon, title, value, color, trend }) => {
+export const StatsCard = ({ icon: Icon, title, value, color, variant = 'dark' }) => {
+  const valueColor = variant === 'light' ? color ?? '#111827' : color;
+
   return (
-    <div className={styles.card} style={{ borderTopColor: color }}>
-      <div className={styles.iconWrapper} style={{ backgroundColor: `${color}20` }}>
-        <Icon size={28} style={{ color }} />
-      </div>
-      <div className={styles.content}>
-        <p className={styles.title}>{title}</p>
-        <div className={styles.valueSection}>
-          <p className={styles.value}>{value}</p>
-          {trend && (
-            <span className={`${styles.trend} ${styles[trend.type]}`}>
-              {trend.icon} {trend.text}
-            </span>
-          )}
+    <div className={`${styles.card} ${variant === 'light' ? styles.light : styles.dark}`}>
+      <div className={styles.cardHeader}>
+        {Icon && (
+          <div className={`${styles.iconWrapper} ${variant === 'light' ? styles.iconLight : ''}`}>
+            <Icon className={styles.icon} />
+          </div>
+        )}
+        <div className={styles.cardInfo}>
+          <p className={styles.cardValue} style={{ color: valueColor }}>{value}</p>
+          <p className={styles.cardTitle}>{title}</p>
         </div>
       </div>
     </div>
