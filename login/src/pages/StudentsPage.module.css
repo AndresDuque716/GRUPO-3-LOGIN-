@@ -23,8 +23,317 @@
 
 .statsGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: var(--space-lg);
+}
+
+.statsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+}
+
+.statsHeaderSubtitle {
+  margin: 8px 0 0;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 1rem;
+}
+
+.metricCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-lg);
+  margin-top: var(--space-lg);
+}
+
+.analyticsGrid {
+  display: grid;
+  grid-template-columns: minmax(280px, 1.2fr) minmax(360px, 1.8fr);
+  gap: var(--space-lg);
+  margin-top: var(--space-xl);
+}
+
+.analyticsCard {
+  background: rgba(15, 23, 42, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.22);
+}
+
+.analyticsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.analyticsLabel {
+  font-size: 1.05rem;
+  margin: 0;
+  font-weight: 700;
+  color: white;
+}
+
+.donutWrapper {
+  display: grid;
+  gap: 24px;
+  align-items: center;
+}
+
+.donutChart {
+  width: min(260px, 100%);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  position: relative;
+  margin: 0 auto;
+}
+
+.donutInner {
+  position: absolute;
+  inset: 22%;
+  border-radius: 50%;
+  background: #0f172a;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.donutPercent {
+  font-size: 2rem;
+  font-weight: 700;
+  color: white;
+}
+
+.donutLabel {
+  margin-top: 8px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.chartLegend {
+  display: grid;
+  gap: 14px;
+}
+
+.legendItem {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: center;
+}
+
+.legendDotGreen,
+.legendDotRed {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legendDotGreen {
+  background: #22c55e;
+}
+
+.legendDotRed {
+  background: #ef4444;
+}
+
+.legendTitle {
+  margin: 0;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.legendValue {
+  margin: 4px 0 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: white;
+}
+
+.updateNote {
+  margin-top: 20px;
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.updateLabel {
+  margin: 0;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.66);
+}
+
+.updateValue {
+  margin: 6px 0 0;
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 600;
+}
+
+.lineChart {
+  min-height: 320px;
+  position: relative;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.96) 0%, rgba(15, 23, 42, 0.9) 100%);
+  border-radius: 24px;
+  overflow: hidden;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  gap: 20px;
+}
+
+.lineChartYAxis {
+  display: grid;
+  grid-template-rows: repeat(6, 1fr);
+  align-items: end;
+  gap: 8px;
+}
+
+.lineChartYAxisLabel {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.68);
+  text-align: right;
+}
+
+.lineChartCanvas {
+  position: relative;
+  width: 100%;
+  min-height: 220px;
+}
+
+.lineChartSvg {
+  width: 100%;
+  height: 220px;
+  overflow: visible;
+}
+
+.lineChartPolyline {
+  fill: none;
+  stroke: #38bdf8;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.lineChartDot {
+  fill: #ffffff;
+  stroke: #0ea5e9;
+  stroke-width: 0.6;
+}
+
+.lineChartDotLabel {
+  font-size: 0.65rem;
+  fill: rgba(255, 255, 255, 0.9);
+  font-weight: 700;
+}
+
+.lineChartLabels {
+  grid-column: 2 / span 1;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.lineChartLabel {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+}
+
+.chartSummary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-lg);
+  margin-top: 24px;
+}
+
+.summaryItem {
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.summaryLabel {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.95rem;
+}
+
+.summaryValue {
+  margin: 10px 0 0;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.summaryRow {
+  display: grid;
+  grid-template-columns: 2fr minmax(180px, 1fr);
+  gap: var(--space-lg);
+  margin-top: var(--space-xl);
+}
+
+.summaryCard {
+  padding: 24px;
+  border-radius: 24px;
+  background: rgba(15, 23, 42, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: white;
+}
+
+.summaryCard h3 {
+  color: white;
+}
+
+.summaryCard p {
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.75;
+}
+
+.summaryCard h3 {
+  color: #111827;
+}
+
+.summaryCard p {
+  color: #4b5563;
+}
+
+.summaryCard h3 {
+  margin: 0 0 12px;
+  font-size: 1.05rem;
+  color: white;
+}
+
+.summaryCard p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.75;
+}
+
+.trendCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px;
+  border-radius: 24px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.18);
+}
+
+.trendValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #10b981;
+}
+
+.trendCard p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.74);
 }
 
 .toolbar {
