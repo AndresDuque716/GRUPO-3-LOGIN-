@@ -1,6 +1,7 @@
+import { memo } from 'react';
 import styles from './Button.module.css';
 
-export const Button = ({ children, variant = 'primary', size = 'md', icon: Icon, ...props }) => {
+const ButtonComponent = ({ children, variant = 'primary', size = 'md', icon: Icon, ...props }) => {
   return (
     <button className={`${styles.button} ${styles[variant]} ${styles[size]}`} {...props}>
       {Icon && <Icon size={20} />}
@@ -8,3 +9,5 @@ export const Button = ({ children, variant = 'primary', size = 'md', icon: Icon,
     </button>
   );
 };
+
+export const Button = memo(ButtonComponent);

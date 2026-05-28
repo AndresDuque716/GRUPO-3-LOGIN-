@@ -1,13 +1,18 @@
+import { memo, useCallback } from 'react';
 import styles from './Header.module.css';
 import { Menu, Bell } from 'lucide-react';
 
-export const Header = ({ sidebarOpen, onMenuToggle, totalStudents, filteredStudents }) => {
+const HeaderComponent = ({ sidebarOpen, onMenuToggle, totalStudents, filteredStudents }) => {
+  const handleMenuClick = useCallback(() => {
+    onMenuToggle();
+  }, [onMenuToggle]);
+
   return (
     <header className={styles.header}>
       <div className={styles.headerContent}>
         <div className={styles.titleSection}>
           {sidebarOpen !== undefined && (
-            <button className={styles.menuButton} onClick={onMenuToggle}>
+            <button className={styles.menuButton} onClick={handleMenuClick}>
               <Menu size={24} />
             </button>
           )}
@@ -26,3 +31,5 @@ export const Header = ({ sidebarOpen, onMenuToggle, totalStudents, filteredStude
     </header>
   );
 };
+
+export const Header = memo(HeaderComponent);

@@ -1,7 +1,16 @@
+import { memo, useCallback } from 'react';
 import styles from './FilterPanel.module.css';
 import { courses, estados } from '../../data/mockStudents';
 
-export const FilterPanel = ({ filters, onFilterChange, onReset }) => {
+const FilterPanelComponent = ({ filters, onFilterChange, onReset }) => {
+  const handleCourseChange = useCallback((e) => {
+    onFilterChange('curso', e.target.value);
+  }, [onFilterChange]);
+
+  const handleEstadoChange = useCallback((e) => {
+    onFilterChange('estado', e.target.value);
+  }, [onFilterChange]);
+
   return (
     <div className={styles.panel}>
       <div className={styles.group}>
@@ -9,7 +18,7 @@ export const FilterPanel = ({ filters, onFilterChange, onReset }) => {
         <select
           className={styles.select}
           value={filters.curso}
-          onChange={(e) => onFilterChange('curso', e.target.value)}
+          onChange={handleCourseChange}
         >
           <option value="">Todos los cursos</option>
           {courses.map(course => (
@@ -23,7 +32,7 @@ export const FilterPanel = ({ filters, onFilterChange, onReset }) => {
         <select
           className={styles.select}
           value={filters.estado}
-          onChange={(e) => onFilterChange('estado', e.target.value)}
+          onChange={handleEstadoChange}
         >
           <option value="">Todos los estados</option>
           {estados.map(estado => (
@@ -38,3 +47,5 @@ export const FilterPanel = ({ filters, onFilterChange, onReset }) => {
     </div>
   );
 };
+
+export const FilterPanel = memo(FilterPanelComponent);

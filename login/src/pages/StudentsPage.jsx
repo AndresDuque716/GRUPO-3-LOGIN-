@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import styles from './StudentsPage.module.css';
 import { Sidebar } from '../components/layout/Sidebar';
 import { Header } from '../components/layout/Header';
@@ -44,32 +44,32 @@ export const StudentsPage = () => {
   }, [students, searchQuery, filters]);
 
   // Calculate statistics
-  const stats = calculateStats(filteredStudents);
+  const stats = useMemo(() => calculateStats(filteredStudents), [filteredStudents]);
 
   // Toast notification
-  const showToast = (message, type = 'success') => {
+  const showToast = useCallback((message, type = 'success') => {
     const id = Date.now();
     setToasts(prev => [...prev, { id, message, type, duration: 3000 }]);
-  };
+  }, []);
 
-  const removeToast = (id) => {
+  const removeToast = useCallback((id) => {
     setToasts(prev => prev.filter(toast => toast.id !== id));
-  };
+  }, []);
 
   // Handle add new student
-  const handleNewStudent = () => {
+  const handleNewStudent = useCallback(() => {
     setSelectedStudent(null);
     setFormOpen(true);
-  };
+  }, []);
 
   // Handle edit student
-  const handleEditStudent = (student) => {
+  const handleEditStudent = useCallback((student) => {
     setSelectedStudent(student);
     setFormOpen(true);
-  };
+  }, []);
 
   // Handle save student
-  const handleSaveStudent = (studentData) => {
+  const handleSaveStudent = useCallback((studentData) => {
     if (selectedStudent) {
       // Update existing student
       setStudents(prev => prev.map(s => s.id === studentData.id ? studentData : s));
@@ -80,50 +80,70 @@ export const StudentsPage = () => {
       showToast('Estudiante agregado correctamente', 'success');
     }
     setFormOpen(false);
-  };
+  }, [selectedStudent, showToast]);
 
   // Handle delete student
-  const handleDeleteStudent = (student) => {
+  const handleDeleteStudent = useCallback((student) => {
     setStudentToDelete(student);
     setDeleteDialogOpen(true);
-  };
+  }, []);
 
   // Confirm delete
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = useCallback(() => {
     if (studentToDelete) {
       setStudents(prev => prev.filter(s => s.id !== studentToDelete.id));
       showToast('Estudiante eliminado correctamente', 'success');
       setDeleteDialogOpen(false);
       setStudentToDelete(null);
     }
-  };
+  }, [studentToDelete, showToast]);
 
   // Handle filter change
-  const handleFilterChange = (key, value) => {
+  const handleFilterChange = useCallback((key, value) => {
     setFilters(prev => ({
       ...prev,
       [key]: value
     }));
-  };
+  }, []);
 
   // Reset filters
-  const handleResetFilters = () => {
+  const handleResetFilters = useCallback(() => {
     setSearchQuery('');
     setFilters({ curso: '', estado: '' });
     showToast('Filtros limpiados', 'info');
-  };
+  }, [showToast]);
+
+  // Handle menu toggle
+  const handleMenuToggle = useCallback(() => {
+    setSidebarOpen(prev => !prev);
+  }, []);
+
+  // Handle view change
+  const handleViewChange = useCallback((newView) => {
+    setView(newView);
+    setSidebarOpen(false);
+  }, []);
+
+  const handleCloseForm = useCallback(() => {
+    setFormOpen(false);
+  }, []);
+
+  const handleCancelDelete = useCallback(() => {
+    setDeleteDialogOpen(false);
+    setStudentToDelete(null);
+  }, []);
 
   return (
     <div className={styles.container}>
       {/* Sidebar */}
-      {isDesktop && <Sidebar view={view} onNavigate={setView} />}
+      {isDesktop && <Sidebar view={view} onNavigate={handleViewChange} />}
 
       {/* Main Content */}
       <div className={styles.main}>
         {/* Header */}
         <Header
           sidebarOpen={!isDesktop ? sidebarOpen : undefined}
-          onMenuToggle={() => setSidebarOpen(!sidebarOpen)}
+          onMenuToggle={handleMenuToggle}
           totalStudents={students.length}
           filteredStudents={filteredStudents.length}
         />
@@ -138,7 +158,7 @@ export const StudentsPage = () => {
                     icon={Users}
                     title="Total Estudiantes"
                     value={stats.total}
-                    color={process.env.NODE_ENV === 'production' ? '#2563eb' : '#2563eb'}
+                    color="#2563eb"
                   />
                   <StatsCard
                     icon={TrendingUp}
@@ -244,14 +264,14 @@ export const StudentsPage = () => {
         </div>
 
         {/* Mobile Navbar */}
-        {isMobile && <MobileNavbar view={view} onNavigate={setView} />}
+        {isMobile && <MobileNavbar view={view} onNavigate={handleViewChange} />}
       </div>
 
       {/* Modals */}
       <StudentFormModal
         isOpen={formOpen}
         student={selectedStudent}
-        onClose={() => setFormOpen(false)}
+        onClose={handleCloseForm}
         onSave={handleSaveStudent}
       />
 
@@ -260,10 +280,7 @@ export const StudentsPage = () => {
         title="Eliminar Estudiante"
         message={`¿Estás seguro de que deseas eliminar a ${studentToDelete?.nombre}? Esta acción no se puede deshacer.`}
         onConfirm={handleConfirmDelete}
-        onCancel={() => {
-          setDeleteDialogOpen(false);
-          setStudentToDelete(null);
-        }}
+        onCancel={handleCancelDelete}
       />
 
       {/* Toast Container */}

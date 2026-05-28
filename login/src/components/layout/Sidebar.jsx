@@ -1,11 +1,12 @@
+import { memo, useCallback } from 'react';
 import styles from './Sidebar.module.css';
 import { Home, FileText, BarChart3, Settings, LogOut } from 'lucide-react';
 
-export const Sidebar = ({ view = 'students', onNavigate }) => {
-  const handleNav = (e, key) => {
+const SidebarComponent = ({ view = 'students', onNavigate }) => {
+  const handleNav = useCallback((e, key) => {
     e.preventDefault();
     if (onNavigate) onNavigate(key);
-  };
+  }, [onNavigate]);
 
   return (
     <aside className={styles.sidebar}>
@@ -62,3 +63,5 @@ export const Sidebar = ({ view = 'students', onNavigate }) => {
     </aside>
   );
 };
+
+export const Sidebar = memo(SidebarComponent);

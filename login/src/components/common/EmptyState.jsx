@@ -1,7 +1,8 @@
+import { memo } from 'react';
 import styles from './EmptyState.module.css';
 import { Users } from 'lucide-react';
 
-export const EmptyState = ({ icon: Icon = Users, title, message, action }) => {
+const EmptyStateComponent = ({ icon: Icon = Users, title, message, action }) => {
   return (
     <div className={styles.container}>
       <div className={styles.iconWrapper}>
@@ -13,3 +14,5 @@ export const EmptyState = ({ icon: Icon = Users, title, message, action }) => {
     </div>
   );
 };
+
+export const EmptyState = memo(EmptyStateComponent);

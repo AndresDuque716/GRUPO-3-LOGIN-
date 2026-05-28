@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, memo } from 'react';
 import { createPortal } from 'react-dom';
 import styles from './Toast.module.css';
 import { CheckCircle, AlertCircle, XCircle } from 'lucide-react';
 
-export const Toast = ({ message, type = 'success', duration = 3000, onClose }) => {
+const ToastComponent = ({ message, type = 'success', duration = 3000, onClose }) => {
   useEffect(() => {
     const timer = setTimeout(onClose, duration);
     return () => clearTimeout(timer);
@@ -33,11 +33,15 @@ export const Toast = ({ message, type = 'success', duration = 3000, onClose }) =
   );
 };
 
-export const ToastContainer = ({ toasts, removeToast }) => {
+const ToastMemo = memo(ToastComponent);
+
+export const Toast = ToastMemo;
+
+const ToastContainerComponent = ({ toasts, removeToast }) => {
   return (
     <div className={styles.container}>
       {toasts.map(toast => (
-        <Toast
+        <ToastMemo
           key={toast.id}
           message={toast.message}
           type={toast.type}
@@ -48,3 +52,5 @@ export const ToastContainer = ({ toasts, removeToast }) => {
     </div>
   );
 };
+
+export const ToastContainer = memo(ToastContainerComponent);

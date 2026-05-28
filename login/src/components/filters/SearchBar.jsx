@@ -1,7 +1,16 @@
+import { memo, useCallback } from 'react';
 import styles from './SearchBar.module.css';
 import { Search, X } from 'lucide-react';
 
-export const SearchBar = ({ value, onChange, placeholder = 'Buscar por nombre o email...' }) => {
+const SearchBarComponent = ({ value, onChange, placeholder = 'Buscar por nombre o email...' }) => {
+  const handleChange = useCallback((e) => {
+    onChange(e.target.value);
+  }, [onChange]);
+
+  const handleClear = useCallback(() => {
+    onChange('');
+  }, [onChange]);
+
   return (
     <div className={styles.searchBar}>
       <Search size={20} className={styles.searchIcon} />
@@ -10,12 +19,12 @@ export const SearchBar = ({ value, onChange, placeholder = 'Buscar por nombre o 
         className={styles.input}
         placeholder={placeholder}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={handleChange}
       />
       {value && (
         <button
           className={styles.clearButton}
-          onClick={() => onChange('')}
+          onClick={handleClear}
           aria-label="Clear search"
         >
           <X size={18} />
@@ -24,3 +33,5 @@ export const SearchBar = ({ value, onChange, placeholder = 'Buscar por nombre o 
     </div>
   );
 };
+
+export const SearchBar = memo(SearchBarComponent);

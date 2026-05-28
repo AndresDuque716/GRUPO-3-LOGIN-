@@ -1,6 +1,7 @@
+import { memo } from 'react';
 import styles from './StatsCard.module.css';
 
-export const StatsCard = ({ icon: Icon, title, value, color, trend }) => {
+const StatsCardComponent = ({ icon: Icon, title, value, color, trend }) => {
   return (
     <div className={styles.card} style={{ borderTopColor: color }}>
       <div className={styles.iconWrapper} style={{ backgroundColor: `${color}20` }}>
@@ -20,3 +21,5 @@ export const StatsCard = ({ icon: Icon, title, value, color, trend }) => {
     </div>
   );
 };
+
+export const StatsCard = memo(StatsCardComponent);

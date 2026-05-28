@@ -1,14 +1,18 @@
+import { memo, useCallback } from 'react';
 import styles from './StudentCard.module.css';
 import { Edit2, Trash2, Award } from 'lucide-react';
 import { formatDate } from '../../utils/helpers';
 
-export const StudentCard = ({ student, onEdit, onDelete }) => {
-  const getPromedioColor = (promedio) => {
-    if (promedio >= 90) return '#22c55e';
-    if (promedio >= 80) return '#2563eb';
-    if (promedio >= 70) return '#f97316';
-    return '#ef4444';
-  };
+const getPromedioColor = (promedio) => {
+  if (promedio >= 90) return '#22c55e';
+  if (promedio >= 80) return '#2563eb';
+  if (promedio >= 70) return '#f97316';
+  return '#ef4444';
+};
+
+const StudentCardComponent = ({ student, onEdit, onDelete }) => {
+  const handleEdit = useCallback(() => onEdit(student), [onEdit, student]);
+  const handleDelete = useCallback(() => onDelete(student), [onDelete, student]);
 
   return (
     <div className={styles.card}>
@@ -57,7 +61,7 @@ export const StudentCard = ({ student, onEdit, onDelete }) => {
       <div className={styles.footer}>
         <button
           className={styles.button}
-          onClick={() => onEdit(student)}
+          onClick={handleEdit}
           title="Editar"
         >
           <Edit2 size={18} />
@@ -65,7 +69,7 @@ export const StudentCard = ({ student, onEdit, onDelete }) => {
         </button>
         <button
           className={styles.button}
-          onClick={() => onDelete(student)}
+          onClick={handleDelete}
           title="Eliminar"
         >
           <Trash2 size={18} />
@@ -75,3 +79,5 @@ export const StudentCard = ({ student, onEdit, onDelete }) => {
     </div>
   );
 };
+
+export const StudentCard = memo(StudentCardComponent);
